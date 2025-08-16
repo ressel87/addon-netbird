@@ -3,7 +3,7 @@ name: NetBird
 version: v0.54.2
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
-url: https://github.com/netbirdio/addon-netbird
+url: https://github.com/ressel87/addon-netbird
 codenotary: lfarkas@lfarkas.org
 startup: services
 panel_icon: mdi:vpn
