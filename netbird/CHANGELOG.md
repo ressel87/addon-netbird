@@ -1,5 +1,21 @@
 # Changelog
 
+## [v0.64.4] - 2026-02-01
+
+### Changed
+- Updated to NetBird v0.64.4
+
+### Upstream Release Notes
+## What's Changed
+* [client] Add macOS default resolvers as fallback by @lixmal in https://github.com/netbirdio/netbird/pull/5201
+* [client] Add block inbound option to the embed client by @lixmal in https://github.com/netbirdio/netbird/pull/5215
+* [management] Disable local users for a smooth single-idp mode by @braginini in https://github.com/netbirdio/netbird/pull/5226
+* [management] disable sync lim by @crn4 in https://github.com/netbirdio/netbird/pull/5233
+* [management] run cancelPeerRoutines in goroutine in sync by @crn4 in https://github.com/netbirdio/netbird/pull/5234
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.64.3...v0.64.4
+
 ## [v0.64.3] - 2026-01-29
 
 ### Changed
