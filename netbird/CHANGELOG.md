@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.70.2] - 2026-04-29
+
+### Changed
+- Updated to NetBird v0.70.2
+
+### Upstream Release Notes
+## What's Changed
+* [client] Move macOS sleep detection into the daemon (purego) by @lixmal in https://github.com/netbirdio/netbird/pull/5926
+* [client] Fix Windows installer upgrade detection for pre-0.70.1 installs by @lixmal in https://github.com/netbirdio/netbird/pull/6025
+* [misc] Add comment automation on release workflow for PRs by @jnfrati in https://github.com/netbirdio/netbird/pull/6016
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.70.1...v0.70.2
+
 ## [v0.70.1] - 2026-04-29
 
 ### Changed
