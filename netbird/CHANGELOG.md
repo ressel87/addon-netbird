@@ -1,5 +1,27 @@
 # Changelog
 
+## [v0.71.3] - 2026-05-20
+
+### Changed
+- Updated to NetBird v0.71.3
+
+### Upstream Release Notes
+## What's Changed
+* [management] fix: device redirect uri wasn't registered by @jnfrati in https://github.com/netbirdio/netbird/pull/6191
+* [management] Fence peer status updates with a session token by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6193
+* [management] Add metrics for peer status updates and ephemeral cleanup by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6196
+* [management] Ensure SessionStartedAt has a default value by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6211
+* [proxy]  clusters API surfaces type, online status, and capability flags by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6148
+* [misc] Update contribution guidelines by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6219
+* [client] Bump macOS sleep callback timeout to 20s by @lixmal in https://github.com/netbirdio/netbird/pull/6220
+* [doc] Clean up README by @lixmal in https://github.com/netbirdio/netbird/pull/6178
+* [proxy] concurrent proxy snapshot apply by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6207
+* [management] scope network router update call by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6222
+* [client] Fix nil channel panic in external chain monitor stop by @lixmal in https://github.com/netbirdio/netbird/pull/6224
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.71.2...v0.71.3
+
 ## [v0.71.2] - 2026-05-16
 
 ### Changed
