@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.72.1] - 2026-06-05
+
+### Changed
+- Updated to NetBird v0.72.1
+
+### Upstream Release Notes
+## What's Changed
+* [management] Copy private field on shallowCloneMapping by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6347
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.72.0...v0.72.1
+
 ## [v0.72.0] - 2026-06-05
 
 ### Changed
