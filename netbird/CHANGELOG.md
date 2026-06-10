@@ -1,5 +1,63 @@
 # Changelog
 
+## [v0.72.3] - 2026-06-10
+
+### Changed
+- Updated to NetBird v0.72.3
+
+### Upstream Release Notes
+## Release Notes for v0.72.3
+
+### What's New
+
+#### Client Improvements
+- Added commands to **discover and write Kubernetes configuration**.  `experimental`
+  https://github.com/netbirdio/netbird/pull/6260
+- Masked **sensitive data during debug bundle creation**.  
+  https://github.com/netbirdio/netbird/pull/6364
+- Preserved **user deselect-all route preferences across management syncs**.  
+  https://github.com/netbirdio/netbird/pull/6363
+- Fixed **state manager crashes caused by concurrent iptables map access**.  
+  https://github.com/netbirdio/netbird/pull/6345
+- Added **WebSocket relay fallback** when QUIC datagrams exceed transport limits.  
+  https://github.com/netbirdio/netbird/pull/6339
+- Filtered **DNS fallback upstreams matching NetBird server IPs** to prevent loops.  
+  https://github.com/netbirdio/netbird/pull/6183
+- Preserved **posture checks on configuration-only sync updates**.  
+  https://github.com/netbirdio/netbird/pull/6373
+- Improved embedded client shutdown by **canceling context before stopping the engine**.  
+  https://github.com/netbirdio/netbird/pull/6397
+
+#### Management Improvements
+- Added **IPv6 default permit rules for exit node routes**.  
+  https://github.com/netbirdio/netbird/pull/6368
+- Logged **user agent information and returned request IDs**.  
+  https://github.com/netbirdio/netbird/pull/6380
+- Added **version gating to stop sending deprecated RemotePeers field**.  
+  https://github.com/netbirdio/netbird/pull/6371
+- Fixed **L4 service updates when no custom port is configured**.  
+  https://github.com/netbirdio/netbird/pull/6396
+
+#### Proxy Enhancements
+- Added **non-blocking mapping updates**.  
+  https://github.com/netbirdio/netbird/pull/6369
+- Improved certificate handling by **notifying readiness for domains covered by static certificates**.  
+  https://github.com/netbirdio/netbird/pull/6389
+- Switched **proxy ID generation to UUIDs**.  
+  https://github.com/netbirdio/netbird/pull/6391
+
+#### Infrastructure & Tooling
+- Improved support for **atomic Linux distributions** in install scripts and fixed Docker-related issues in getting-started.sh.  
+  https://github.com/netbirdio/netbird/pull/6139
+- Updated the **Go toolchain version** in go.mod.  
+  https://github.com/netbirdio/netbird/pull/6377
+
+### New Contributors
+- @PizzaLovingNerd made their first contribution in https://github.com/netbirdio/netbird/pull/6139
+- @bdolgov made their first contribution in https://github.com/netbirdio/netbird/pull/6389
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.72.2...v0.72.3
+
 ## [v0.72.2] - 2026-06-06
 
 ### Changed
