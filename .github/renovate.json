@@ -44,7 +44,8 @@
         "netbirdio/netbird:[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "netbirdio/netbird"
+      "depNameTemplate": "netbirdio/netbird",
+      "extractVersionTemplate": "^v?(?<version>.+)$"
     },
     {
       "customType": "regex",
