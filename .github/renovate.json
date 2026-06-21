@@ -56,7 +56,8 @@
         "version:\\s+[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "netbirdio/netbird"
+      "depNameTemplate": "netbirdio/netbird",
+      "extractVersionTemplate": "^v?(?<version>.+)$"
     }
   ],
   "packageRules": [
@@ -64,7 +65,7 @@
       "matchDatasources": [
         "repology"
       ],
-      "automerge": true
+      "enabled": false
     },
     {
       "matchDatasources": [
