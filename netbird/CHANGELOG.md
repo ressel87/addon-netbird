@@ -1,22 +1,161 @@
 # Changelog
 
-## [v0.73.2] - 2026-06-22
+## [v0.74.0] - 2026-07-01
 
 ### Changed
-- Updated to NetBird v0.73.2
+- Updated to NetBird v0.74.0
 
 ### Upstream Release Notes
-## What's Changed
-* [misc] Bump the actions group across 1 directory with 9 updates by @dependabot[bot] in https://github.com/netbirdio/netbird/pull/6451
-* [client] Surface DNS forwarder upstream failures via Extended DNS Errors by @lixmal in https://github.com/netbirdio/netbird/pull/6441
-* [misc] Add TARGETPLATFORM build argument to Docker build commands by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6499
-* [client] Add Auth.Stop() to cancel an in-progress interactive login by @pappz in https://github.com/netbirdio/netbird/pull/6486
-* [client] Fix engine lifecyrcle race by @pappz in https://github.com/netbirdio/netbird/pull/6443
-* [client] fix WaitStreamConnected test call after ctx signature change by @pappz in https://github.com/netbirdio/netbird/pull/6503
-* [misc] Add enterprise getting-started and migrate script by @bcmmbaga in https://github.com/netbirdio/netbird/pull/6501
-* [management] do not use meta diff for login by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6502
-* [management] validate meta change against posture checks by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6510
-* [management] empty file check in nmap on other posturechecks by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6511
+## Release Notes for v0.74.0
 
+### New Feature: Agent Network
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.73.1...v0.73.2
+This release introduces **Agent Network**, a per-account LLM gateway that gives people and agents keyless, identity-based access to LLM APIs and internal resources over the tunnel. It is built on top of the existing reverse proxy and private services, so the transport is still NetBird's WireGuard overlay and the identity model is still your IdP. Have a tunnel, get access; no tunnel, no access.
+
+Agents point at a tunnel-only endpoint instead of the provider's URL. NetBird holds the upstream provider key server-side, injects it per request, and ties every call to a real identity from your IdP. Client-supplied auth headers are stripped before the request is forwarded, so a hardcoded key never reaches the provider. The whole thing is **default deny**: nothing reaches a provider until a policy explicitly allows it.
+
+Core capabilities:
+
+- **Keyless access to LLM APIs.** No keys stored or shared on the client. The tunnel is the credential.
+- **Provider catalog.** First-party APIs (OpenAI, Anthropic, Azure OpenAI, AWS Bedrock, Google Vertex AI, Mistral), AI gateways (LiteLLM Proxy, Portkey, Bifrost, Cloudflare AI Gateway, Vercel AI Gateway, OpenRouter), and any custom/self-hosted OpenAI-compatible endpoint (Ollama, vLLM, local GPU hosts).
+- **Policies.** A policy connects a Source Group (users or agent devices from your IdP) to one or more providers.
+- **Limits.** Token caps and budget (USD) caps per user and per group, plus account-wide Global Limits that can only tighten a policy, never loosen it.
+- **Guardrails.** Model allowlist, optional prompt capture, and PII redaction on captured logs.
+- **Usage and access logs.** Per-request accounting (identity, provider, model, tokens, cost) plus a full access log (method, path, status, duration, and prompt/completion when capture is on), with denied-request reasons, 7-90 day or indefinite retention, and filtering by user or group.
+- **Agentic access to internal resources.** Databases, internal APIs, and self-hosted models reachable over peer-to-peer WireGuard, no proxy in the path, governed by the same identities and policies.
+- **Bring your own gateway.** When forwarding to LiteLLM, NetBird passes the calling identity along by writing IdP groups into `metadata.tags` and the identity into the `x-litellm-end-user-id` header.
+
+The dashboard ships copy-paste Agent Config for Claude Code, Codex, the OpenAI SDK, and cURL, with the endpoint pre-filled and no API key involved.
+
+#### Discussion
+https://github.com/netbirdio/netbird/discussions/6634
+
+#### Enabling Agent Network
+
+Agent Network ships in the same backend. If you already run NetBird, set an environment variable on your dashboard and it appears in the left-hand menu:
+
+``` bash
+# Enable alongside the rest of the platform
+NETBIRD_AGENT_NETWORK_ENABLED=true
+
+# Or run a stripped-down, Agent-Network-only dashboard
+NETBIRD_AGENT_NETWORK_ONLY=true
+```
+
+For a fresh, minimal deployment focused on the LLM and agentic-access use case:
+
+``` bash
+curl -fsSL https://pkgs.netbird.io/getting-started.sh | NETBIRD_AGENT_NETWORK=true bash
+```
+
+> Note: Agent Network is **self-hosted only** for now; NetBird Cloud support is coming. 
+
+Learn more:
+- Overview: https://docs.netbird.io/agent-network
+- Quickstart: https://docs.netbird.io/agent-network/quickstart
+- How it works: https://docs.netbird.io/agent-network/how-it-works
+- Providers: https://docs.netbird.io/agent-network/providers
+
+### What's Changed
+
+#### Agent Network
+- Added the **per-account LLM gateway (Agent Network)**: store, manager, policy engine, provider catalog, and management HTTP + proxy gRPC surfaces, with the reverse-proxy middleware chain handling limit checks, cost metering, guardrails, identity injection, and response parsing.
+  [#6555](https://github.com/netbirdio/netbird/pull/6555)
+- Added **agent-network telemetry metrics**.
+  [#6561](https://github.com/netbirdio/netbird/pull/6561)
+- Added **management-controlled client metrics push**.
+  https://github.com/netbirdio/netbird/pull/5886
+- Added **per-provider skip_tls_verification** for Agent Network.
+  https://github.com/netbirdio/netbird/pull/6630
+- Added **Agent Network preset** for self-hosted deployments.
+  https://github.com/netbirdio/netbird/pull/6569
+- Added Agent Network documentation and banner updates.
+  https://github.com/netbirdio/netbird/pull/6562
+  https://github.com/netbirdio/netbird/pull/6564
+- Added Agent Network nightly/manual E2E workflows.
+  https://github.com/netbirdio/netbird/pull/6629
+
+#### Client Improvements
+- Added management-controlled client metrics push.
+  https://github.com/netbirdio/netbird/pull/5886
+- Eliminated packet loss during lazy connections.
+  https://github.com/netbirdio/netbird/pull/6355
+- Reinject captured first packet on lazy connection activation.
+  https://github.com/netbirdio/netbird/pull/6572
+- Improved network address filtering.
+  https://github.com/netbirdio/netbird/pull/6515
+- Fixed empty profile handle regression in debug config.
+  https://github.com/netbirdio/netbird/pull/6514
+- Skip re-resolving cached management cache domains.
+  https://github.com/netbirdio/netbird/pull/6518
+- Suppress Quick Actions popup when DisableAutoConnect=true.
+  https://github.com/netbirdio/netbird/pull/6542
+- Fix blocked status lock via relay manager path.
+  https://github.com/netbirdio/netbird/pull/6547
+- Lower ICE handshake offer/answer log level to debug.
+  https://github.com/netbirdio/netbird/pull/6565
+- Keep signal stream alive while receive loop is blocked on worker handoff.
+  https://github.com/netbirdio/netbird/pull/6530
+- Wait for signal receive watchdog to stop before reconnect.
+  https://github.com/netbirdio/netbird/pull/6574
+- Report management unhealthy while Sync stream is failing.
+  https://github.com/netbirdio/netbird/pull/6575
+- Refresh receive liveness when worker handoff drains.
+  https://github.com/netbirdio/netbird/pull/6594
+- Raise duration validation limit to 24 hours.
+  https://github.com/netbirdio/netbird/pull/6598
+- Skip firewall ruleset rebuild when config is unchanged.
+  https://github.com/netbirdio/netbird/pull/6508
+- Bound system info and posture-check gathering with a timeout to prevent sync-loop freeze.
+  https://github.com/netbirdio/netbird/pull/6512
+- Categorize privileged tests behind a build tag and run them in Docker.
+  https://github.com/netbirdio/netbird/pull/6425
+- Forward non-address DNS record types through route forwarders.
+  https://github.com/netbirdio/netbird/pull/6455
+- Add per-phase timing metrics for sync processing.
+  https://github.com/netbirdio/netbird/pull/6533
+- Use dedicated IsHealthy RPC for management health checks.
+  https://github.com/netbirdio/netbird/pull/6421
+- Fix pointer comparisons in profile config apply.
+  https://github.com/netbirdio/netbird/pull/6622
+- Fix race between WG watcher initial handshake read and endpoint creation.
+  https://github.com/netbirdio/netbird/pull/6626
+
+#### Management Improvements
+- Rescheduled inactivity expiration when a peer disconnects.
+  https://github.com/netbirdio/netbird/pull/6523
+- Validate posture checks on metadata changes before updating the account.
+  https://github.com/netbirdio/netbird/pull/6527
+- Relaxed metaHash validation when blocking peers.
+  https://github.com/netbirdio/netbird/pull/6531
+- Simplified affected peers processing by ignoring disabled peers.
+  https://github.com/netbirdio/netbird/pull/6540
+- Optimized affected posture checks and added additional logging.
+  https://github.com/netbirdio/netbird/pull/6522
+- Restored client version checks in the login filter hash.
+  https://github.com/netbirdio/netbird/pull/6552
+- Added peer expiration reason to activity metadata.
+  https://github.com/netbirdio/netbird/pull/6619
+- Detached JWT group synchronization from request cancellation.
+  https://github.com/netbirdio/netbird/pull/6621
+- Enabled Lazy Connections by default for new accounts.
+  https://github.com/netbirdio/netbird/pull/6571
+
+#### Infrastructure & Miscellaneous
+- Applied small GitHub workflow fixes.
+  https://github.com/netbirdio/netbird/pull/6546
+- Updated the careers page link.
+  https://github.com/netbirdio/netbird/pull/6538
+- Bumped GitHub Actions dependencies.
+  https://github.com/netbirdio/netbird/pull/6550
+- Updated the project to v0.74.0.
+  https://github.com/netbirdio/netbird/pull/6563
+- Required on-premise EULA acceptance in Enterprise installation scripts.
+  https://github.com/netbirdio/netbird/pull/6596
+
+### New Contributors
+- @dmitri-netbird
+- @Adel-Ayoub
+- @den-dw
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.73.2...v0.74.0
