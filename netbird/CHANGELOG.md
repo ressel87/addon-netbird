@@ -1,17 +1,18 @@
 # Changelog
 
-## [v0.74.1] - 2026-07-02
+## [v0.74.2] - 2026-07-03
 
 ### Changed
-- Updated to NetBird v0.74.1
+- Updated to NetBird v0.74.2
 
 ### Upstream Release Notes
 ## What's Changed
-* [client] Make lazy connections opt-out via NB_LAZY_CONN by @lixmal in https://github.com/netbirdio/netbird/pull/6617
-* [client] Run privileged client tests natively with sudo on Linux by @pappz in https://github.com/netbirdio/netbird/pull/6635
-* [self-hosted] Remove image override logic in getting started by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6636
-* [management] Add vLLM support for Agent Network by @braginini in https://github.com/netbirdio/netbird/pull/6643
-* [management] return nil when config is not set by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6642
+* [management] Add vLLM e2e test by @braginini in https://github.com/netbirdio/netbird/pull/6649
+* [misc] Fix GHCR image push after dockers_v2 migration by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6653
+* [client] Increase management client gRPC receive limit default to 16MB by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/6641
+* [client] Fix slow wg operations by @pappz in https://github.com/netbirdio/netbird/pull/6633
+* [client] backport enforce a single selected exit node by @pappz in https://github.com/netbirdio/netbird/pull/6640
+* [client] Fix backoff.Ticker goroutine leak in reconnect guard by @theodorsm in https://github.com/netbirdio/netbird/pull/6663
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.0...v0.74.1
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.1...v0.74.2
