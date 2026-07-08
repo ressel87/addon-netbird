@@ -1,18 +1,15 @@
 # Changelog
 
-## [v0.74.2] - 2026-07-03
+## [v0.74.3] - 2026-07-08
 
 ### Changed
-- Updated to NetBird v0.74.2
+- Updated to NetBird v0.74.3
 
 ### Upstream Release Notes
 ## What's Changed
-* [management] Add vLLM e2e test by @braginini in https://github.com/netbirdio/netbird/pull/6649
-* [misc] Fix GHCR image push after dockers_v2 migration by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6653
-* [client] Increase management client gRPC receive limit default to 16MB by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/6641
-* [client] Fix slow wg operations by @pappz in https://github.com/netbirdio/netbird/pull/6633
-* [client] backport enforce a single selected exit node by @pappz in https://github.com/netbirdio/netbird/pull/6640
-* [client] Fix backoff.Ticker goroutine leak in reconnect guard by @theodorsm in https://github.com/netbirdio/netbird/pull/6663
+* [client] fix MDM managementURL conflict on default-port URL echo by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/6672
+* [client] Update gopsutil to v4 by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6688
+* [client] Fix hanging status command during relay dial by @theodorsm in https://github.com/netbirdio/netbird/pull/6694
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.1...v0.74.2
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.2...v0.74.3
