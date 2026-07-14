@@ -1,17 +1,14 @@
 # Changelog
 
-## [v0.74.4] - 2026-07-11
+## [v0.74.5] - 2026-07-14
 
 ### Changed
-- Updated to NetBird v0.74.4
+- Updated to NetBird v0.74.5
 
 ### Upstream Release Notes
 ## What's Changed
-* [management] fix: prevent reverse proxy domain from being pushed as DNS search domain by @blaugrau90 in https://github.com/netbirdio/netbird/pull/6498
-* [client] Recover from rosenpass key desync by @lixmal in https://github.com/netbirdio/netbird/pull/6714
-* [client] Bump golang.org/x/crypto to v0.54.0 by @lixmal in https://github.com/netbirdio/netbird/pull/6709
+* [proxy] enforce model allowlist for URL-routed providers (Bedrock/Vertex) by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6764
+* [management] Remove proxy peer stale deduplication logic by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6768
 
-## New Contributors
-* @blaugrau90 made their first contribution in https://github.com/netbirdio/netbird/pull/6498
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.3...v0.74.4
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.74.4...v0.74.5
