@@ -1,6 +1,6 @@
 ---
 name: "NetBird (Ressel fork)"
-version: 0.74.4
+version: 0.74.5
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/ressel87/addon-netbird
