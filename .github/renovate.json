@@ -44,6 +44,7 @@
         "netbirdio/netbird:[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
+      "versioningTemplate": "loose",
       "depNameTemplate": "netbirdio/netbird",
       "extractVersionTemplate": "^v?(?<version>.+)$"
     },
@@ -56,6 +57,7 @@
         "version:\\s+[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
+      "versioningTemplate": "loose",
       "depNameTemplate": "netbirdio/netbird",
       "extractVersionTemplate": "^v?(?<version>.+)$"
     }

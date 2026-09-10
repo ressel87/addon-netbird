@@ -1,6 +1,6 @@
 ---
 name: "NetBird (BornData fork)"
-version: 0.78.1
+version: 0.78.1.1
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/ressel87/addon-netbird
