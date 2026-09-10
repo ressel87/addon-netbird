@@ -1,5 +1,5 @@
 ---
-name: "NetBird (Ressel fork)"
+name: "NetBird (BornData fork)"
 version: 0.78.1
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
