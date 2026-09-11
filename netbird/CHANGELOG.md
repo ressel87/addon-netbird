@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.78.1.2] - 2026-09-11
+
+Fork-only hotfix (same NetBird v0.78.1 binary).
+
+### Fixed
+- Hostname validation from upstream only accepted ASCII letters, digits and hyphens,
+  so existing installs with names like `BS-HA-Nexø1` could no longer save options or
+  start. The fork keeps `hostname` as free text (`str?`), as it was before 0.78.1.1.
+
 ## [0.78.1.1] - 2026-09-10
 
 Fork-only release (same NetBird v0.78.1 binary). Version scheme is
