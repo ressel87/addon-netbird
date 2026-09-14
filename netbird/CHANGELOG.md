@@ -1,34 +1,14 @@
 # Changelog
 
-## [0.78.1.2] - 2026-09-11
-
-Fork-only hotfix (same NetBird v0.78.1 binary).
-
-### Fixed
-- Hostname validation from upstream only accepted ASCII letters, digits and hyphens,
-  so existing installs with names like `BS-HA-Nexø1` could no longer save options or
-  start. The fork keeps `hostname` as free text (`str?`), as it was before 0.78.1.1.
-
-## [0.78.1.1] - 2026-09-10
-
-Fork-only release (same NetBird v0.78.1 binary). Version scheme is
-`<netbird-version>.<fork-release>`; Renovate replaces it with the next NetBird release.
+## [v0.78.2] - 2026-09-14
 
 ### Changed
-- Renamed add-on and repository to "BornData fork"; maintainer BornData.dk <support@borndata.dk>
-- Synced with upstream netbirdio/addon-netbird:
-  - Self-heal a stale `app.netbird.io` Management URL on startup (upstream #401)
-  - Optional config fields (`admin_url`, `management_url`, `setup_key`) and FQDN-capable hostname validation
-  - CI hardening in GitHub workflows
-
-## [v0.78.1] - 2026-09-04
-
-### Changed
-- Updated to NetBird v0.78.1
+- Updated to NetBird v0.78.2
 
 ### Upstream Release Notes
 ## What's Changed
-* [management] Serve networks with peer-based routers from the SQLite network map by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7424
+* [client] Fix the Windows tray deadlock on re-entrant window creation by @pappz in https://github.com/netbirdio/netbird/pull/7537
+* [client] Bump wireguard-go to 8bf8fa968f1a by @pappz in https://github.com/netbirdio/netbird/pull/7538
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.78.0...v0.78.1
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.78.1...v0.78.2
