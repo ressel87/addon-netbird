@@ -33,7 +33,8 @@
       ],
       "versioningTemplate": "loose",
       "datasourceTemplate": "repology",
-      "depNameTemplate": "alpine_3_19/{{package}}"
+      "depNameTemplate": "alpine_3_24/{{package}}",
+      "description": "apk pins in Dockerfile. The alpine_3_xx repo must match the Alpine version of ghcr.io/hassio-addons/base (see hassio-addons/addon-base base/build.yaml); update it when the base image moves to a new Alpine release."
     },
     {
       "customType": "regex",
