@@ -36,8 +36,9 @@
       ],
       "versioningTemplate": "loose",
       "datasourceTemplate": "repology",
+      "registryUrlTemplate": "https://repology.amdmi3.ru/",
       "depNameTemplate": "alpine_3_24/{{package}}",
-      "description": "apk pins in Dockerfile. The alpine_3_xx repo must match the Alpine version of ghcr.io/hassio-addons/base (see hassio-addons/addon-base base/build.yaml); update it when the base image moves to a new Alpine release."
+      "description": "apk pins in Dockerfile. TEMPORARY: registryUrlTemplate points at the maintainer's interim host because repology.org is offline (domain on registrar hold since 2026-09-13, https://github.com/repology/repology-rs/issues/560); remove it when repology.org resolves again. The alpine_3_xx repo must match the Alpine version of ghcr.io/hassio-addons/base (see hassio-addons/addon-base base/build.yaml); update it when the base image moves to a new Alpine release."
     },
     {
       "customType": "regex",
@@ -72,13 +73,6 @@
         "repology"
       ],
       "automerge": true
-    },
-    {
-      "description": "TEMPORARY: repology.org is offline (domain on registrar hold since 2026-09-13, see https://github.com/repology/repology-rs/issues/560). Remove this rule when repology.org resolves again.",
-      "matchDatasources": [
-        "repology"
-      ],
-      "enabled": false
     },
     {
       "matchDatasources": [
