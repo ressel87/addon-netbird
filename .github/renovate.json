@@ -74,6 +74,13 @@
       "automerge": true
     },
     {
+      "description": "TEMPORARY: repology.org is offline (domain on registrar hold since 2026-09-13, see https://github.com/repology/repology-rs/issues/560). Remove this rule when repology.org resolves again.",
+      "matchDatasources": [
+        "repology"
+      ],
+      "enabled": false
+    },
+    {
       "matchDatasources": [
         "docker"
       ],
