@@ -1,87 +1,131 @@
 # Changelog
 
-## [v0.79.0] - 2026-09-18
+## [v0.80.0] - 2026-10-01
 
 ### Changed
-- Updated to NetBird v0.79.0
+- Updated to NetBird v0.80.0
 
 ### Upstream Release Notes
-## Release Notes for v0.79.0
+# Release Notes for v0.80.0
 
-### New Feature: Desktop Light Mode
+## What's New
 
-The desktop app now gives you three appearance options: System, Light, and Dark. Follow your operating system's theme or choose the look you prefer. The new light theme covers the connection view, settings, profiles, and dialogs, with matching native window appearance on Windows, macOS, and Linux. [#7344](https://github.com/netbirdio/netbird/pull/7344) by @TechHutTV
+### 🔒 Security and Access Control
 
-<img width="2022" height="1542" alt="image" src="https://github.com/user-attachments/assets/2081f103-f766-4f2d-92df-b304eaaa5acb" />
+* **Refused to pin an agent network gateway onto another account's host**, adding cross-account validation for gateway assignments. [#7519](https://github.com/netbirdio/netbird/pull/7519)
+* **Validated proxy cluster on Agent Network bootstrap**, preventing an agent network from bootstrapping onto another account's proxy cluster. [#7402](https://github.com/netbirdio/netbird/pull/7402)
+* **Refused HTTP redirects on IdP clients**, preventing open redirect attacks against identity provider integrations. [#7579](https://github.com/netbirdio/netbird/pull/7579)
+* **Revoked local Dex session on embedded IdP password change**, ensuring sessions are properly invalidated when credentials are updated. [#7556](https://github.com/netbirdio/netbird/pull/7556)
+* Added **upload URL signing and rate limiting** for file upload endpoints. [#7502](https://github.com/netbirdio/netbird/pull/7502)
 
-This release also brings shared MDM policy enforcement to the mobile SDKs, a rootless Red Hat UBI container image, and improvements to DNS, relay connections, and reverse proxy access controls.
+### 🖥️ Client Improvements
 
-### What's Changed
+* **Staged install script downloads in a private temp directory**, preventing other processes from tampering with downloaded files before installation. [#7534](https://github.com/netbirdio/netbird/pull/7534)
+* **Enforced HTTPS on install script downloads**, ensuring all client downloads use secure connections. [#7545](https://github.com/netbirdio/netbird/pull/7545)
+* Fixed **peers not being notified when the relay connection drops**, which could leave stale peer state after a relay disconnect. [#7490](https://github.com/netbirdio/netbird/pull/7490)
+* Fixed **session deadline read under the status read lock**, preventing a potential race condition. [#7550](https://github.com/netbirdio/netbird/pull/7550)
+* **Removed the empty GPO DNS policy store on Windows teardown**, cleaning up leftover DNS policy entries when the client shuts down. [#7563](https://github.com/netbirdio/netbird/pull/7563)
+* **Resolved the shared socket source address through a connected UDP probe socket**, fixing source address resolution for shared socket mode. [#7633](https://github.com/netbirdio/netbird/pull/7633)
+* **Validated saved service parameters and pinned the netsh lookup** on Windows, hardening the service configuration path. [#7584](https://github.com/netbirdio/netbird/pull/7584)
+* **Used POSIX-style file read/write of JSON on Windows**, improving cross-platform config file handling. [#7631](https://github.com/netbirdio/netbird/pull/7631)
+* **Raised the daemon IPC receive limit to 16 MB**, matching gRPC's default and preventing truncation of large messages. [#7676](https://github.com/netbirdio/netbird/pull/7676)
+* **Skipped route firewall rule computation when no firewall** is configured, avoiding unnecessary work. [#7624](https://github.com/netbirdio/netbird/pull/7624)
+* Fixed **device dump clearing all peer endpoints** instead of just the target one, which could disrupt connections to other peers. [#7632](https://github.com/netbirdio/netbird/pull/7632)
+* Fixed **Windows IPC privilege check** to only treat LocalSystem as a privileged identity by SID. Local Service and Network Service now go through the same checks as any other caller. [#7889](https://github.com/netbirdio/netbird/pull/7889)
+* **Bumped Wails to v3.0.0-beta.25** for the desktop UI. [#7640](https://github.com/netbirdio/netbird/pull/7640)
 
-#### Desktop Client Improvements
+### ⚙️ Management Improvements
 
-- Fixed a Windows tray deadlock that could freeze the app when a double-click opened a window while another window was still being created. [#7449](https://github.com/netbirdio/netbird/pull/7449) by @pappz
-- Fixed the MDM settings snapshot so the UI correctly reports when remote jobs are managed by policy. [#7485](https://github.com/netbirdio/netbird/pull/7485) by @pappz
+* **Sped up test store setup and summarized unit test runs**, improving CI performance. [#7518](https://github.com/netbirdio/netbird/pull/7518)
+* **Read X-Real-IP when extracting the peer connection IP**, supporting deployments behind reverse proxies. [#7561](https://github.com/netbirdio/netbird/pull/7561)
+* **Handled empty trusted peer** to avoid errors when no trusted peer is configured. [#7589](https://github.com/netbirdio/netbird/pull/7589)
+* **Named the account owner in the pending approval error**, making it clear who to contact for account approval. [#7533](https://github.com/netbirdio/netbird/pull/7533)
+* Fixed **group resource validation** for proper enforcement. [#7608](https://github.com/netbirdio/netbird/pull/7608)
+* Added **store support to filter by public ID**. [#7208](https://github.com/netbirdio/netbird/pull/7208)
+* **Recorded proxy version on connect** for tracking and debugging. [#7630](https://github.com/netbirdio/netbird/pull/7630)
+* **Split store by table** for improved database performance and organization. [#7646](https://github.com/netbirdio/netbird/pull/7646)
+* **Prevented deleting custom domains used by services**, protecting active proxy configurations from accidental removal. [#7515](https://github.com/netbirdio/netbird/pull/7515)
+* **Moved rate limiter to shared package** for reuse across services. [#7727](https://github.com/netbirdio/netbird/pull/7727)
+* **Let usage_viewer read Agent Network access logs**, so users reviewing cost can now see the requests behind usage metrics. [#7750](https://github.com/netbirdio/netbird/pull/7750)
 
-#### Client Improvements
+### 🔀 Reverse Proxy
 
-- Added MDM policy bridges and shared enforcement for the iOS and Android SDKs, keeping managed settings and profile restrictions consistent with the desktop client. [#6435](https://github.com/netbirdio/netbird/pull/6435) by @riccardomanfrin
-- Accepted MDM boolean values delivered as JSON numbers, so policies using `0` and `1` are applied correctly. [#7471](https://github.com/netbirdio/netbird/pull/7471) by @riccardomanfrin
-- Compared MDM-managed URLs by their normalized endpoints, avoiding false conflicts between equivalent URLs. [#7472](https://github.com/netbirdio/netbird/pull/7472) by @riccardomanfrin
-- Refreshed system information on every management sync reconnect, keeping local network addresses and posture information current after network changes. [#7409](https://github.com/netbirdio/netbird/pull/7409) by @pappz
-- Used host prefixes for Android TUN addresses so local network protection does not classify the entire overlay as a local network. [#7414](https://github.com/netbirdio/netbird/pull/7414) by @pappz
-- Replaced the eBPF DNS forwarder with UDP and TCP DNAT rules when the resolver cannot listen on port 53, with rollback and cleanup for incomplete redirects. [#7439](https://github.com/netbirdio/netbird/pull/7439) by @lixmal
-- Fixed a relay address race that could advertise a URL and IP from different connections during a reconnect. [#7498](https://github.com/netbirdio/netbird/pull/7498) by @pappz
-- Returned the context cancellation or timeout error when an SSH handshake is interrupted. [#7426](https://github.com/netbirdio/netbird/pull/7426) by @pappz
-- Updated wireguard-go to `8bf8fa968f1a`, fixing keepalive buffer-pool stalls, keeping timer paths non-blocking, and making netstack interface shutdown idempotent. [#7532](https://github.com/netbirdio/netbird/pull/7532) by @pappz
-- Allowed buffer-pool limits to be adjusted while a device is stalled, and bounded proxy-wide updates so one stuck client does not block the others. [#7452](https://github.com/netbirdio/netbird/pull/7452) by @riccardomanfrin
+* **Closed the client connection on private service denials** instead of leaving it hanging. [#7590](https://github.com/netbirdio/netbird/pull/7590)
+* Added **proxy rate limiter** to protect against abuse. [#7568](https://github.com/netbirdio/netbird/pull/7568)
+* Added **proxy credentials limiter on management** to throttle authentication attempts. [#7569](https://github.com/netbirdio/netbird/pull/7569)
+* Fixed **upstream HTTP version applied before cloning transports**. [#7806](https://github.com/netbirdio/netbird/pull/7806)
+* Added **release-wired UBI image variant** for the proxy. [#7464](https://github.com/netbirdio/netbird/pull/7464)
+* Fixed **flow auth secret for external Relay migrations**. [#7731](https://github.com/netbirdio/netbird/pull/7731)
 
-#### Management Improvements
+### 🏗️ Infrastructure and CI
 
-- Restored networks using individual peers as routers in the SQLite network map when `peer_groups` is empty or null. [#7418](https://github.com/netbirdio/netbird/pull/7418) by @mlsmaycon
-- Fixed SQLite network-map reads for users with null automatic groups and expanded coverage for empty and null router groups. [#7425](https://github.com/netbirdio/netbird/pull/7425) by @dmitri-netbird
-- Included offline peers when scheduling login expiration and ensured expired peers are disconnected, while protecting peers that have just logged in again. [#7467](https://github.com/netbirdio/netbird/pull/7467) by @pascal-fischer
-- Applied duplicate-key sync protection to user-owned peers as well as peers registered with setup keys. [#7427](https://github.com/netbirdio/netbird/pull/7427) by @pascal-fischer
-- Validated that a peer exists before adding it to a group. [#7486](https://github.com/netbirdio/netbird/pull/7486) by @pascal-fischer
-- Prevented other users from deleting the account owner. [#7456](https://github.com/netbirdio/netbird/pull/7456) by @pascal-fischer
-- Hardened OIDC issuer validation by requiring HTTPS, rejecting credentials, query strings, and fragments in issuer URLs, refusing discovery redirects, and limiting discovery response size. [#7435](https://github.com/netbirdio/netbird/pull/7435) by @bcmmbaga
-- Cleaned up resources when WebSocket-to-gRPC proxy connections close. [#7484](https://github.com/netbirdio/netbird/pull/7484) by @dmitri-netbird
+* **Certified the rootless UBI client image on release** for Red Hat ecosystem compliance. [#7525](https://github.com/netbirdio/netbird/pull/7525)
+* Fixed **RPM metadata for Red Hat software certification** (two rounds of fixes). [#7562](https://github.com/netbirdio/netbird/pull/7562), [#7614](https://github.com/netbirdio/netbird/pull/7614)
+* Added **proxy support to enterprise setup**. [#7651](https://github.com/netbirdio/netbird/pull/7651)
+* **Built the upload server from source, nonroot on Chainguard** for a hardened container image. [#7663](https://github.com/netbirdio/netbird/pull/7663)
+* **Built and linted mobile Go code in CI** for Android. [#7641](https://github.com/netbirdio/netbird/pull/7641)
+* **Bumped workflow actions off the retired Node 20 runtime**. [#7644](https://github.com/netbirdio/netbird/pull/7644)
+* Added **Pyroscope profiling** to management, signal, and proxy services. [#7536](https://github.com/netbirdio/netbird/pull/7536)
+* **Pointed the agent-config e2e providers at the mock upstream**. [#7542](https://github.com/netbirdio/netbird/pull/7542)
+* **Used the Silo image for the S3 upload test**. [#7619](https://github.com/netbirdio/netbird/pull/7619)
 
-#### Agent Network
+### 📝 Misc
 
-- Added managed proxy provisioning endpoints and response types to the API specification. [#7433](https://github.com/netbirdio/netbird/pull/7433) by @bison
-- Prevented deletion of groups referenced by Agent Network budget rules, preserving the rules' spending limits. [#7450](https://github.com/netbirdio/netbird/pull/7450) by @Tyagiquamar
+* **Pointed bug reports at Discussions and added SUPPORT.md**. [#7647](https://github.com/netbirdio/netbird/pull/7647)
+* Added **cloud API spec to the public OpenAPI** definition with REST client. [#7222](https://github.com/netbirdio/netbird/pull/7222)
+* **Loaded AGENTS.md every session and refused attribution trailers**. [#7544](https://github.com/netbirdio/netbird/pull/7544)
 
-#### Reverse Proxy Improvements
+## What's Changed
 
-- Added `NB_PROXY_UPSTREAM_HTTP_VERSION` with `auto`, `1.1`, and `2` options. The default `auto` mode negotiates with HTTPS upstreams and falls back to HTTP/1.1 when an upstream's negotiated HTTP/2 connection fails at the protocol level. [#7410](https://github.com/netbirdio/netbird/pull/7410) by @lixmal
-- Enforced group access both when issuing session cookies and when accepting existing sessions. [#7240](https://github.com/netbirdio/netbird/pull/7240) by @lixmal
-- Required custom domain validation before creating a service or moving one to a different custom domain. [#7341](https://github.com/netbirdio/netbird/pull/7341) by @mlsmaycon
-- Added a 48-hour validation window for custom domain registrations. Existing pending registrations receive a fresh window on upgrade; expired registrations are removed unless they still have services attached. [#7497](https://github.com/netbirdio/netbird/pull/7497) by @mlsmaycon
-- Rejected unsupported direct-upstream IP addresses, including loopback, multicast, link-local, and IPv6 addresses with zone identifiers. [#7400](https://github.com/netbirdio/netbird/pull/7400) by @dmitri-netbird
-- Validated domain names before creating certificate lock files. [#7501](https://github.com/netbirdio/netbird/pull/7501) by @pascal-fischer
+* [management] Speed up test store setup and summarize the unit test run by @mlsmaycon in [#7518](https://github.com/netbirdio/netbird/pull/7518)
+* [management] Refuse to pin an agent network gateway onto another account's host by @mlsmaycon in [#7519](https://github.com/netbirdio/netbird/pull/7519)
+* [management] Validate the proxy cluster an agent network bootstraps onto by @mlsmaycon in [#7402](https://github.com/netbirdio/netbird/pull/7402)
+* [management] Point the agent-config e2e providers at the mock upstream by @mlsmaycon in [#7542](https://github.com/netbirdio/netbird/pull/7542)
+* [client] Stage install script downloads in a private temp directory by @riccardomanfrin in [#7534](https://github.com/netbirdio/netbird/pull/7534)
+* [client] Read the session deadline under the status read lock by @pappz in [#7550](https://github.com/netbirdio/netbird/pull/7550)
+* [client] Enforce HTTPS on install script downloads by @riccardomanfrin in [#7545](https://github.com/netbirdio/netbird/pull/7545)
+* [misc] Load AGENTS.md every session and refuse attribution trailers by @mlsmaycon in [#7544](https://github.com/netbirdio/netbird/pull/7544)
+* [client] Fix - Add RPM metadata required for Red Hat software certification by @braginini in [#7562](https://github.com/netbirdio/netbird/pull/7562)
+* [management] Read X-Real-IP when extracting the peer connection IP by @bcmmbaga in [#7561](https://github.com/netbirdio/netbird/pull/7561)
+* [management] Handle empty trusted peer by @bcmmbaga in [#7589](https://github.com/netbirdio/netbird/pull/7589)
+* [proxy] Close the client connection on private service denials by @mlsmaycon in [#7590](https://github.com/netbirdio/netbird/pull/7590)
+* [management] Name the account owner in the pending approval error by @heisbrot in [#7533](https://github.com/netbirdio/netbird/pull/7533)
+* [proxy] add proxy rate limiter by @pascal-fischer in [#7568](https://github.com/netbirdio/netbird/pull/7568)
+* [management] Add proxy credentials limiter on management by @pascal-fischer in [#7569](https://github.com/netbirdio/netbird/pull/7569)
+* [client] Fix peers not being notified when the relay connection drops by @pappz in [#7490](https://github.com/netbirdio/netbird/pull/7490)
+* [management] fix group resource validation by @pascal-fischer in [#7608](https://github.com/netbirdio/netbird/pull/7608)
+* [client] Remove the empty GPO DNS policy store on Windows teardown by @lixmal in [#7563](https://github.com/netbirdio/netbird/pull/7563)
+* [management] add store support to filter by public id by @pascal-fischer in [#7208](https://github.com/netbirdio/netbird/pull/7208)
+* [client,management] Skip route firewall rule computation when no firewall by @riccardomanfrin in [#7624](https://github.com/netbirdio/netbird/pull/7624)
+* [management] record proxy version on connect by @pascal-fischer in [#7630](https://github.com/netbirdio/netbird/pull/7630)
+* [management,signal,proxy] add pyroscope profiling by @pascal-fischer in [#7536](https://github.com/netbirdio/netbird/pull/7536)
+* [client] Validate the saved service parameters and pin the netsh lookup by @riccardomanfrin in [#7584](https://github.com/netbirdio/netbird/pull/7584)
+* [client] Use POSIX style file read/write of json for windows by @theodorsm in [#7631](https://github.com/netbirdio/netbird/pull/7631)
+* [client] Fix RPM metadata for Red Hat certification by @braginini in [#7614](https://github.com/netbirdio/netbird/pull/7614)
+* [misc] Bump workflow actions off the retired Node 20 runtime by @heisbrot in [#7644](https://github.com/netbirdio/netbird/pull/7644)
+* [misc] Add upload URL signing and rate limiting by @bcmmbaga in [#7502](https://github.com/netbirdio/netbird/pull/7502)
+* [misc] Use the Silo image for the S3 upload test by @Silex in [#7619](https://github.com/netbirdio/netbird/pull/7619)
+* [management] split store by table by @pascal-fischer in [#7646](https://github.com/netbirdio/netbird/pull/7646)
+* [management] Refuse HTTP redirects on IdP clients by @bcmmbaga in [#7579](https://github.com/netbirdio/netbird/pull/7579)
+* [management] Revoke local Dex session on embedded IdP password change by @bcmmbaga in [#7556](https://github.com/netbirdio/netbird/pull/7556)
+* [misc, android] Build and lint the mobile Go code in CI by @riccardomanfrin in [#7641](https://github.com/netbirdio/netbird/pull/7641)
+* [client] Raise the daemon IPC receive limit gRPC's to 16 MB by @riccardomanfrin in [#7676](https://github.com/netbirdio/netbird/pull/7676)
+* [misc] Build the upload server from source, nonroot on Chainguard by @bison in [#7663](https://github.com/netbirdio/netbird/pull/7663)
+* [infrastructure] Certify the rootless UBI client image on release by @braginini in [#7525](https://github.com/netbirdio/netbird/pull/7525)
+* [client] Resolve the shared socket source address through a connected UDP probe socket by @lixmal in [#7633](https://github.com/netbirdio/netbird/pull/7633)
+* [proxy] Add a release-wired UBI image variant by @jnfrati in [#7464](https://github.com/netbirdio/netbird/pull/7464)
+* [infrastructure] Add proxy support to enterprise setup by @bcmmbaga in [#7651](https://github.com/netbirdio/netbird/pull/7651)
+* [doc] Point bug reports at Discussions and add SUPPORT.md by @thomashacker in [#7647](https://github.com/netbirdio/netbird/pull/7647)
+* [management] Prevent deleting custom domains used by services by @mlsmaycon in [#7515](https://github.com/netbirdio/netbird/pull/7515)
+* [management] move rate limiter to shared package by @pascal-fischer in [#7727](https://github.com/netbirdio/netbird/pull/7727)
+* [client] Bump wails to v3.0.0-beta.25 by @pappz in [#7640](https://github.com/netbirdio/netbird/pull/7640)
+* [client] Stop dumping the whole device to clear one peer endpoint by @lixmal in [#7632](https://github.com/netbirdio/netbird/pull/7632)
+* [infrastructure] Fix flow auth secret for external Relay migrations by @braginini in [#7731](https://github.com/netbirdio/netbird/pull/7731)
+* [proxy] Apply the upstream HTTP version before cloning transports by @mlsmaycon in [#7806](https://github.com/netbirdio/netbird/pull/7806)
+* [management] Let usage_viewer read Agent Network access logs by @jnfrati in [#7750](https://github.com/netbirdio/netbird/pull/7750)
+* [client] Only treat LocalSystem as a privileged identity by SID on Windows by @lixmal in [#7889](https://github.com/netbirdio/netbird/pull/7889)
 
-#### Self-Hosting Improvements
+## New Contributors
+* @thomashacker made their first contribution in [#7647](https://github.com/netbirdio/netbird/pull/7647)
 
-- Added a rootless Red Hat UBI image for AMD64 and ARM64, published with the `0.79.0-rootless-ubi` tag. [#7469](https://github.com/netbirdio/netbird/pull/7469) by @jnfrati
-- Supported arbitrary non-root UIDs without a passwd entry, as used by OpenShift. [#7440](https://github.com/netbirdio/netbird/pull/7440) by @jnfrati
-- Added RPM dependencies, license and documentation files, a generated changelog, and an example `/etc/sysconfig/netbird` to meet Red Hat software certification packaging requirements. [#7562](https://github.com/netbirdio/netbird/pull/7562), [#7573](https://github.com/netbirdio/netbird/pull/7573) by @mlsmaycon
-- Kept deployments using the embedded identity provider on a single account, with stricter configuration checks and migration handling. [#7380](https://github.com/netbirdio/netbird/pull/7380) by @bcmmbaga
-- Passed the combined server's TLS configuration through to the management listener. [#7499](https://github.com/netbirdio/netbird/pull/7499) by @pascal-fischer
-- Updated peer connection-IP extraction to honor configured `TrustedPeers`, with `X-Forwarded-For` taking precedence over `X-Real-IP`. The final release preserves trust in all IPv4 and IPv6 sources when `TrustedPeers` is empty; configure your reverse proxy's address or network to restrict which sources can supply forwarded-IP headers. [#7454](https://github.com/netbirdio/netbird/pull/7454), [#7589](https://github.com/netbirdio/netbird/pull/7589) by @bcmmbaga; [#7561](https://github.com/netbirdio/netbird/pull/7561), [#7577](https://github.com/netbirdio/netbird/pull/7577) by @dmitri-netbird and @bcmmbaga
-
-#### Internal, CI, and Docs
-
-- Added atomic `SetNX` and `GetDel` cache operations. [#7084](https://github.com/netbirdio/netbird/pull/7084) by @bcmmbaga
-- Allowed binaries embedding management to extend its command tree. [#7483](https://github.com/netbirdio/netbird/pull/7483) by @bison
-- Extracted peer update handling and added test coverage. [#7338](https://github.com/netbirdio/netbird/pull/7338) by @dmitri-netbird
-- Replaced a hard-coded temporary directory in WebSocket adapter tests with the platform's temporary directory. [#7503](https://github.com/netbirdio/netbird/pull/7503) by @dmitri-netbird
-- Switched the MinIO test image to `quay.io` after it became unavailable on Docker Hub. [#7516](https://github.com/netbirdio/netbird/pull/7516) by @Silex
-- Preserved image variant suffixes in snapshot tags. [#7511](https://github.com/netbirdio/netbird/pull/7511) by @jnfrati
-- Skipped the protobuf breaking-change check on branch-creation pushes, which have no previous commit to compare against. [#7411](https://github.com/netbirdio/netbird/pull/7411) by @bison
-
----
-
-**Full Changelog:** [v0.78.0...v0.79.0](https://github.com/netbirdio/netbird/compare/v0.78.0...v0.79.0)
-
-
+**Full Changelog**: [v0.79.0...v0.80.0](https://github.com/netbirdio/netbird/compare/v0.79.0...v0.80.0)
